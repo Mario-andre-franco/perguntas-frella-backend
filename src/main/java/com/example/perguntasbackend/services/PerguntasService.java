@@ -31,4 +31,7 @@ public class PerguntasService {
         return perguntasRepository.findAll();
     }
 
+    public Pergunta perguntaAleatoria() {
+        return perguntasRepository.findPerguntaAleatoria();
+    }
 }
