@@ -41,8 +41,8 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
     }
 
-    @PutMapping("/alterar-email/{id}")
-    public ResponseEntity<Usuario> alterarEmail(@PathVariable Long id , String novoEmail) {
+    @PutMapping("/alterar-email/{id}/email")
+    public ResponseEntity<Usuario> alterarEmail(@PathVariable Long id , @RequestParam String novoEmail) {
         Optional<Usuario> usuarioExiste = usuarioService.findById(id);
         if(!usuarioExiste.isPresent()) {
             return ResponseEntity.notFound().build();

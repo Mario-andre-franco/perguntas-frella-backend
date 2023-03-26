@@ -6,23 +6,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name = "tb_resposta")
+@Table(name = "tb_opcao")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Resposta {
+public class OpcaoResposta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "resposta_id")
-    private List<OpcaoResposta> opcoes = new ArrayList<>();
+    private String textoOpcao;
 
+    private boolean verdadeira;
 }
