@@ -24,7 +24,8 @@ public class Pergunta {
     @Column(name = "titulo_pergunta")
     private String tituloPergunta;
 
-    @ManyToMany(mappedBy = "pergunta")
-    private List<Resposta> respostas;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resposta_id", nullable = false)
+    private Resposta respostas;
 
 }

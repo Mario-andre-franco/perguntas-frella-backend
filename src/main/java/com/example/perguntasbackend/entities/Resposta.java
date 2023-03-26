@@ -21,10 +21,6 @@ public class Resposta {
     @Column(name = "texto_reposta")
     private String texto;
 
-    @ManyToOne
-    @JoinColumn(name = "pergunta_id")
-    private Pergunta pergunta;
-
     @Column(name = "resposta_correta")
     private boolean isCorreta;
 }
