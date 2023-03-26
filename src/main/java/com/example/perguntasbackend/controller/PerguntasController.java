@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/perguntas")
@@ -24,6 +25,7 @@ public class PerguntasController {
 
     @PostMapping("/criar-pergunta")
     public Pergunta criarPergunta(@RequestBody Pergunta perguntaModel) {
+
         return perguntasService.save(perguntaModel);
     }
 

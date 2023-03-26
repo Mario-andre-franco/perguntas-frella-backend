@@ -24,8 +24,8 @@ public class Pergunta {
     @Column(name = "titulo_pergunta")
     private String tituloPergunta;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resposta_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "resposta_id")
     private Resposta respostas;
 
 }
