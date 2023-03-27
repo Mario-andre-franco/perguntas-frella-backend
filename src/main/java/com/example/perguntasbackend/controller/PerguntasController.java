@@ -23,6 +23,11 @@ public class PerguntasController {
         return perguntasService.findAll();
     }
 
+    @GetMapping("/consultar-perguntas/{id}")
+    @ResponseBody
+    public Optional<Pergunta> consultarPorId(@PathVariable Long id) {
+        return perguntasService.findById(id);
+    }
     @PostMapping("/criar-pergunta")
     public Pergunta criarPergunta(@RequestBody Pergunta perguntaModel) {
 
