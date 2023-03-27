@@ -24,6 +24,9 @@ public class Pergunta {
     @Column(name = "titulo_pergunta")
     private String tituloPergunta;
 
+    @Column
+    private String categoria;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "resposta_id")
     private Resposta respostas;
