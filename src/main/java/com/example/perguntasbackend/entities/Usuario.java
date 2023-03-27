@@ -28,4 +28,7 @@ public class Usuario {
 
     @Column(name = "senha", nullable = false)
     private String senha;
+
+    @Column(name = "is_admin", columnDefinition = "false")
+    private boolean isAdmin;
 }
