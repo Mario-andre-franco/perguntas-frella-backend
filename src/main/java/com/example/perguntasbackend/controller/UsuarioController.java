@@ -23,10 +23,14 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginFake (@RequestBody Usuario usuario) {
-        if(usuarioService.findById(usuario.getId()).isEmpty()) {
-            ResponseEntity.notFound().build();
+        Optional<Usuario> usuarioEmail = usuarioService.findByEmail(usuario.getEmail());
+        if(usuarioEmail.isPresent()) {
+           Optional<Usuario> usuarioId = usuarioService.findById(usuarioEmail.get().getId());
+           if (usuarioId.isPresent()) {
+               return ResponseEntity.ok().build();
+           }
         }
-        return ResponseEntity.ok().build();
+         return  ResponseEntity.notFound().build();
     }
 
     @PostMapping("/criar-usuario")
