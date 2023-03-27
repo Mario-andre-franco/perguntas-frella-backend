@@ -4,12 +4,18 @@ package com.example.perguntasbackend.controller;
 import com.example.perguntasbackend.entities.Usuario;
 import com.example.perguntasbackend.repositories.UsuarioRepository;
 import com.example.perguntasbackend.services.UsuarioService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @RestController
@@ -25,10 +31,10 @@ public class UsuarioController {
     public ResponseEntity<?> loginFake (@RequestBody Usuario usuario) {
         Optional<Usuario> usuarioEmail = usuarioService.findByEmail(usuario.getEmail());
         if(usuarioEmail.isPresent()) {
-           Optional<Usuario> usuarioId = usuarioService.findById(usuarioEmail.get().getId());
-           if (usuarioId.isPresent()) {
-               return ResponseEntity.ok().build();
-           }
+            if (!usuarioEmail.get().getSenha().equals(usuario.getSenha())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha incorreta");
+            }
+            return ResponseEntity.ok().build();
         }
          return  ResponseEntity.notFound().build();
     }
@@ -57,6 +63,10 @@ public class UsuarioController {
         Usuario usuarioAtualizado = usuarioService.save(usuario);
 
         return ResponseEntity.ok(usuarioAtualizado);
+    }
+
+    private String encryptPassword(String senha) {
+        return DigestUtils.sha256Hex(senha);
     }
 
 }
