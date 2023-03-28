@@ -43,4 +43,10 @@ public class PerguntasController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @PostMapping("/salvar-resposta")
+    public Pergunta salvarResposta(@RequestBody Pergunta perguntaModel) {
+
+        return perguntasService.save(perguntaModel);
+    }
 }

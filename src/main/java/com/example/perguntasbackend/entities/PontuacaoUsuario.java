@@ -7,15 +7,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_usuarios", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name = "tb_pontos")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Usuario {
+public class PontuacaoUsuario {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +27,8 @@ public class Usuario {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
-    @Column(name = "senha", nullable = false)
-    private String senha;
-
-    @Column(name = "is_admin")
-    private boolean isAdmin;
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<PontuacaoUsuario> pontuacaoUsuarioList;
 }
