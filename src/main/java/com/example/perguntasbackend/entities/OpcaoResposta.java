@@ -18,7 +18,9 @@ public class OpcaoResposta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String textoOpcao;
 
+    @Column
     private boolean verdadeira;
 }
