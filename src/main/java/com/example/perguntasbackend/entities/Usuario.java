@@ -34,6 +34,4 @@ public class Usuario {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<PontuacaoUsuario> pontuacaoUsuarioList;
 }

@@ -1,9 +1,13 @@
 package com.example.perguntasbackend.controller;
 
 
+import com.example.perguntasbackend.entities.OpcaoResposta;
 import com.example.perguntasbackend.entities.Pergunta;
+import com.example.perguntasbackend.entities.Usuario;
 import com.example.perguntasbackend.services.PerguntasService;
+import com.example.perguntasbackend.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,9 +48,4 @@ public class PerguntasController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/salvar-resposta")
-    public Pergunta salvarResposta(@RequestBody Pergunta perguntaModel) {
-
-        return perguntasService.save(perguntaModel);
-    }
 }
