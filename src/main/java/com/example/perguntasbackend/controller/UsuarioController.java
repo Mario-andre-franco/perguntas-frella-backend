@@ -51,18 +51,25 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
     }
 
-    @PutMapping("/alterar-email/{id}/email")
-    public ResponseEntity<Usuario> alterarEmail(@PathVariable Long id , @RequestParam String novoEmail) {
+    @PutMapping("/salvar-pontos/{id}/{pontos}")
+    public ResponseEntity<Usuario> salvarPontos(@PathVariable Long id , @RequestParam Integer pontos) {
         Optional<Usuario> usuarioExiste = usuarioService.findById(id);
         if(!usuarioExiste.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-
         Usuario usuario = usuarioExiste.get();
-        usuario.setEmail(novoEmail);
-        Usuario usuarioAtualizado = usuarioService.save(usuario);
+        usuario.setPontosTotais(pontos);
+        usuarioService.save(usuario);
 
-        return ResponseEntity.ok(usuarioAtualizado);
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("consultar-pontos/{id}")
+    public Optional<Usuario> consultarPontos(@PathVariable Long id) {
+        Optional<Usuario> usuarioExiste = usuarioService.findById(id);
+        if (!usuarioExiste.isPresent()) {
+            return usuarioService.findById(id);
+        }
+        return usuarioService.findPontosById(id);
     }
 
 }

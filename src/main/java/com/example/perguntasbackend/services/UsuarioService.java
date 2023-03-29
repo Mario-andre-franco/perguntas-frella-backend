@@ -24,4 +24,8 @@ public class UsuarioService {
     public Usuario save (Usuario usuario) {
       return usuarioRepository.save(usuario);
     }
+
+    public Optional<Usuario> findPontosById(Long id) {
+        return usuarioRepository.findPontosById(id);
+    }
 }

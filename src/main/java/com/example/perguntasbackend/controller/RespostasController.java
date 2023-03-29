@@ -1,6 +1,7 @@
 package com.example.perguntasbackend.controller;
 
 
+import com.example.perguntasbackend.entities.OpcaoResposta;
 import com.example.perguntasbackend.entities.Pergunta;
 import com.example.perguntasbackend.entities.Resposta;
 import com.example.perguntasbackend.entities.Usuario;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,16 +29,30 @@ public class RespostasController {
     @Autowired
     private RespostaService respostaService;
 
-    @PostMapping("/salvar-respostas/{idPergunta}/{idUsuario}")
-    public ResponseEntity<Resposta> salvarRespostas(@PathVariable Long idPergunta,@PathVariable Long idUsuario, @RequestBody Resposta resposta) {
+    @PostMapping("/salvar-respostas/usuario/{idUsuario}/pergunta/{idPergunta}")
+    public ResponseEntity<Resposta> salvarRespostas(@PathVariable Long idUsuario, @PathVariable Long idPergunta, @RequestBody Resposta resposta) {
         Optional<Pergunta> procurarPergunta = perguntasService.findById(idPergunta);
-        Optional<Usuario> usuario = usuarioService.findById(idUsuario);
         if(!procurarPergunta.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        Resposta respostaSalva = respostaService.save(resposta);
+        List<OpcaoResposta> respostaList = resposta.getOpcoes();
 
-        return ResponseEntity.ok().body(respostaSalva);
+        //fazer um for onde, o id da opcao marcada em tela é igual ao id que veio do procurar pergunta
+        for (OpcaoResposta opcao: respostaList)
+        {
+            Long marcada = opcao.getId();
+            if (procurarPergunta.get().getId().equals(marcada)) {
+                return null;
+            }
+        }
 
+        return null;
+
+    }
+
+    @GetMapping("/buscar-repostas/{id}")
+    @ResponseBody
+    public Optional<Resposta> buscarRespostaPorId(@PathVariable Long id) {
+        return respostaService.findById(id);
     }
 }
