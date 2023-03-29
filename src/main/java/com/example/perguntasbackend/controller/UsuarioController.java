@@ -46,7 +46,6 @@ public class UsuarioController {
         if (usuarioExiste.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(usuario);
         }
-
         Usuario usuarioSalvo = usuarioService.save(usuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
