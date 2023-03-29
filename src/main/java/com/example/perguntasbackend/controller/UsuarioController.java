@@ -5,8 +5,6 @@ import com.example.perguntasbackend.entities.Usuario;
 import com.example.perguntasbackend.services.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +15,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UsuarioController.class);
-
 
 
     @Autowired
@@ -29,14 +25,18 @@ public class UsuarioController {
     public ResponseEntity<Usuario> loginFake (@RequestBody Usuario usuario) {
         Optional<Usuario> usuarioEmail = usuarioService.findByEmail(usuario.getEmail());
         if(!usuarioEmail.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         else {
-            if (usuarioEmail.get().getSenha().equals(usuario.getSenha())) {
-                return ResponseEntity.status(HttpStatus.OK).body(usuarioEmail.get());
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            if(!usuarioEmail.get().getSenha().equals(usuario.getSenha())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(usuario);
             }
+        }
+        if (usuarioEmail.get().getSenha().equals(usuario.getSenha())) {
+            return ResponseEntity.ok().body(usuarioEmail.get());
+        }
+        else {
+            return ResponseEntity.badRequest().body(usuarioEmail.get());
         }
     }
 
@@ -44,7 +44,7 @@ public class UsuarioController {
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
         Optional<Usuario> usuarioExiste = usuarioService.findByEmail(usuario.getEmail());
         if (usuarioExiste.isPresent()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(usuario);
         }
 
         Usuario usuarioSalvo = usuarioService.save(usuario);
