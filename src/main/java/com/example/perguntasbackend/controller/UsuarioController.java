@@ -3,7 +3,10 @@ package com.example.perguntasbackend.controller;
 
 import com.example.perguntasbackend.entities.Usuario;
 import com.example.perguntasbackend.services.UsuarioService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UsuarioController.class);
+
 
 
     @Autowired
@@ -21,10 +26,18 @@ public class UsuarioController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginFake (@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> loginFake (@RequestBody Usuario usuario) {
         Optional<Usuario> usuarioEmail = usuarioService.findByEmail(usuario.getEmail());
-
-         return  ResponseEntity.notFound().build();
+        if(!usuarioEmail.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            if (usuarioEmail.get().getSenha().equals(usuario.getSenha())) {
+                return ResponseEntity.status(HttpStatus.OK).body(usuarioEmail.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        }
     }
 
     @PostMapping("/criar-usuario")
