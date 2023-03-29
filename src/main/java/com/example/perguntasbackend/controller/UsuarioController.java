@@ -65,8 +65,4 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
-    private String encryptPassword(String senha) {
-        return DigestUtils.sha256Hex(senha);
-    }
-
 }
