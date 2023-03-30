@@ -70,6 +70,7 @@ public class UsuarioController {
             return usuarioService.findById(id);
         }
         return usuarioService.findPontosById(id);
+
     }
 
 }

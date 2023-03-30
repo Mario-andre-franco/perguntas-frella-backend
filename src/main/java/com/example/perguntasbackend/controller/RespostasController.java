@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,22 +33,21 @@ public class RespostasController {
     @PostMapping("/salvar-respostas/usuario/{idUsuario}/pergunta/{idPergunta}")
     public ResponseEntity<Resposta> salvarRespostas(@PathVariable Long idUsuario, @PathVariable Long idPergunta, @RequestBody Resposta resposta) {
         Optional<Pergunta> procurarPergunta = perguntasService.findById(idPergunta);
-        if(!procurarPergunta.isPresent()) {
+        Optional<Usuario> usuarioExiste = usuarioService.findById(idUsuario);
+        if(!procurarPergunta.isPresent() || !usuarioExiste.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        List<OpcaoResposta> respostaList = resposta.getOpcoes();
-
-        //fazer um for onde, o id da opcao marcada em tela é igual ao id que veio do procurar pergunta
-        for (OpcaoResposta opcao: respostaList)
-        {
-            Long marcada = opcao.getId();
-            if (procurarPergunta.get().getId().equals(marcada)) {
-                return null;
+        List<OpcaoResposta> list =  resposta.getOpcoes();
+        List<OpcaoResposta> listRespostaBanco = procurarPergunta.get().getRespostas().getOpcoes();
+        for (int i = 0; i < list.size() ; i++) {
+            for (int j = 0; j < listRespostaBanco.size(); j++) {
+                if(list.get(i).getId().equals(listRespostaBanco.get(j).getId())) {
+                    respostaService.atualizaPontos(usuarioExiste);
+                    return ResponseEntity.status(HttpStatus.CREATED).build();
+                }
             }
         }
-
-        return null;
-
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @GetMapping("/buscar-repostas/{id}")
