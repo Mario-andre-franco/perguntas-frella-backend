@@ -1,7 +1,9 @@
 package com.example.perguntasbackend.controller;
 
 
+import com.example.perguntasbackend.entities.Pontos;
 import com.example.perguntasbackend.entities.Usuario;
+import com.example.perguntasbackend.services.PontosService;
 import com.example.perguntasbackend.services.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -19,6 +21,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private PontosService pontosService;
 
 
     @PostMapping("/login")
@@ -51,18 +55,6 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
     }
 
-    @PutMapping("/salvar-pontos/{id}/{pontos}")
-    public ResponseEntity<Usuario> salvarPontos(@PathVariable Long id , @RequestParam Integer pontos) {
-        Optional<Usuario> usuarioExiste = usuarioService.findById(id);
-        if(!usuarioExiste.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        Usuario usuario = usuarioExiste.get();
-        usuario.setPontosTotais(pontos);
-        usuarioService.save(usuario);
-
-        return ResponseEntity.ok().build();
-    }
     @GetMapping("consultar-pontos/{id}")
     public Optional<Usuario> consultarPontos(@PathVariable Long id) {
         Optional<Usuario> usuarioExiste = usuarioService.findById(id);
@@ -71,6 +63,18 @@ public class UsuarioController {
         }
         return usuarioService.findPontosById(id);
 
+    }
+
+    @PostMapping("/{id}/salvar-pontos")
+    public ResponseEntity<?> salvarPontos(@PathVariable Long id, @RequestBody int pontos) {
+        Optional<Usuario> usuario = usuarioService.findById(id);
+        Optional<Pontos> pontosOptional = pontosService.findById(id);
+        if (!usuario.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        pontosService.save(pontosOptional.get());
+
+        return ResponseEntity.ok(pontos);
     }
 
 }

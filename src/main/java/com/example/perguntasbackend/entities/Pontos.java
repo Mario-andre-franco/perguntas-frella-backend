@@ -16,8 +16,11 @@ public class Pontos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private Long id;
+    private long id;
+
+    @Column(name = "pontos")
+    int pontos;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
