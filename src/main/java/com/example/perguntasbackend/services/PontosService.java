@@ -21,7 +21,7 @@ public class PontosService {
     UsuarioRepository usuarioRepository;
 
 
-    public Pontos save (Pontos pontos) {
+    public Pontos save (Pontos pontos, Usuario usuario) {
         return pontosRepository.save(pontos);
     }
     public List<Pontos> findAll() {

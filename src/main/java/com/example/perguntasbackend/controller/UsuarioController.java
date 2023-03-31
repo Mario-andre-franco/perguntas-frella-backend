@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -55,7 +56,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
     }
 
-    @GetMapping("consultar-pontos/{id}")
+    @GetMapping("/consultar-pontos/{id}")
     public Optional<Usuario> consultarPontos(@PathVariable Long id) {
         Optional<Usuario> usuarioExiste = usuarioService.findById(id);
         if (!usuarioExiste.isPresent()) {
@@ -65,14 +66,23 @@ public class UsuarioController {
 
     }
 
+    @GetMapping("/consultar-pontos/")
+    @ResponseBody
+    public List<Pontos> consultarPontosTotais() {
+        return pontosService.findAll();
+    }
+
     @PostMapping("/{id}/salvar-pontos")
     public ResponseEntity<?> salvarPontos(@PathVariable Long id, @RequestBody int pontos) {
         Optional<Usuario> usuario = usuarioService.findById(id);
-        Optional<Pontos> pontosOptional = pontosService.findById(id);
+        Optional<Usuario> usuarioOptional = usuarioService.findPontosById(id);
+        Pontos pontos1 = new Pontos();
+        pontos1.setPontos(pontos);
+        pontos1.setUsuario(usuario.get());
         if (!usuario.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        pontosService.save(pontosOptional.get());
+        pontosService.save(pontos1,usuarioOptional.get());
 
         return ResponseEntity.ok(pontos);
     }

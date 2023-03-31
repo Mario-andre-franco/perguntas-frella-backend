@@ -46,7 +46,7 @@ public class RespostasController {
                 if(list.get(i).getId().equals(listRespostaBanco.get(j).getId())) {
                     //salvou usuario com a pontuacao
                     respostaService.atualizaPontos(usuarioExiste);
-                    pontosService.save(pontos.get());
+                    pontosService.save(pontos.get(),usuarioExiste.get());
                     return ResponseEntity.status(HttpStatus.CREATED).build();
                 }
             }
