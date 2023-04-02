@@ -66,6 +66,12 @@ public class UsuarioController {
 
     }
 
+    @GetMapping("/consulta-por-email/")
+    @ResponseBody
+    public Optional<Usuario> consultarUsuarioPorEmail(@RequestBody Usuario usuario) {
+        return usuarioService.findByEmail(usuario.getEmail());
+    }
+
     @GetMapping("/consultar-pontos/")
     @ResponseBody
     public List<Pontos> consultarPontosTotais() {
