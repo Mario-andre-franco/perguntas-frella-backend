@@ -53,4 +53,14 @@ public class PerguntasController {
         return ResponseEntity.badRequest().build();
     }
 
+    @GetMapping("/consultar-perguntas-por-categoria/{idCategoria}")
+    public ResponseEntity<?> gerarPerguntaPorCategoria(@PathVariable String idCategoria) {
+        List<Pergunta> getPerguntas = perguntasService.perguntaPorCategoria(idCategoria);
+        if(getPerguntas.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().body(getPerguntas);
+
+    }
+
 }

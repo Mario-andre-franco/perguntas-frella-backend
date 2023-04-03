@@ -34,4 +34,7 @@ public class PerguntasService {
     public Pergunta perguntaAleatoria() {
         return perguntasRepository.findPerguntaAleatoria();
     }
+    public List<Pergunta> perguntaPorCategoria(String idCategoria) {
+        return perguntasRepository.findPerguntaByCategoria(idCategoria);
+    }
 }
