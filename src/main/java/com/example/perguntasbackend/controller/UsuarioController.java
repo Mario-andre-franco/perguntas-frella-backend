@@ -5,8 +5,6 @@ import com.example.perguntasbackend.entities.Pontos;
 import com.example.perguntasbackend.entities.Usuario;
 import com.example.perguntasbackend.services.PontosService;
 import com.example.perguntasbackend.services.UsuarioService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,20 +25,18 @@ public class UsuarioController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<Usuario> loginFake (@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> loginFake(@RequestBody Usuario usuario) {
         Optional<Usuario> usuarioEmail = usuarioService.findByEmail(usuario.getEmail());
-        if(!usuarioEmail.isPresent()) {
+        if (!usuarioEmail.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        else {
-            if(!usuarioEmail.get().getSenha().equals(usuario.getSenha())) {
+        } else {
+            if (!usuarioEmail.get().getSenha().equals(usuario.getSenha())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(usuario);
             }
         }
         if (usuarioEmail.get().getSenha().equals(usuario.getSenha())) {
             return ResponseEntity.ok().body(usuarioEmail.get());
-        }
-        else {
+        } else {
             return ResponseEntity.badRequest().body(usuarioEmail.get());
         }
     }
@@ -88,7 +84,7 @@ public class UsuarioController {
         if (!usuario.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        pontosService.save(pontos1,usuarioOptional.get());
+        pontosService.save(pontos1, usuarioOptional.get());
 
         return ResponseEntity.ok(pontos);
     }

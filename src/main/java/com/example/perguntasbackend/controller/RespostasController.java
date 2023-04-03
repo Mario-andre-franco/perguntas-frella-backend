@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ import java.util.Optional;
 public class RespostasController {
 
     @Autowired
-    private PerguntasService perguntasService;
+    private PerguntasService perguntasService;  
 
     @Autowired
     private UsuarioService usuarioService;
@@ -36,17 +35,17 @@ public class RespostasController {
         Optional<Pergunta> procurarPergunta = perguntasService.findById(idPergunta);
         Optional<Usuario> usuarioExiste = usuarioService.findById(idUsuario);
         Optional<Pontos> pontos = pontosService.findById(idUsuario);
-        if(!procurarPergunta.isPresent() || !usuarioExiste.isPresent()) {
+        if (!procurarPergunta.isPresent() || !usuarioExiste.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        List<OpcaoResposta> list =  resposta.getOpcoes();
+        List<OpcaoResposta> list = resposta.getOpcoes();
         List<OpcaoResposta> listRespostaBanco = procurarPergunta.get().getRespostas().getOpcoes();
-        for (int i = 0; i < list.size() ; i++) {
+        for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < listRespostaBanco.size(); j++) {
-                if(list.get(i).getId().equals(listRespostaBanco.get(j).getId())) {
+                if (list.get(i).getId().equals(listRespostaBanco.get(j).getId())) {
                     //salvou usuario com a pontuacao
                     respostaService.atualizaPontos(usuarioExiste);
-                    pontosService.save(pontos.get(),usuarioExiste.get());
+                    pontosService.save(pontos.get(), usuarioExiste.get());
                     return ResponseEntity.status(HttpStatus.CREATED).build();
                 }
             }

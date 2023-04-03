@@ -1,10 +1,12 @@
 package com.example.perguntasbackend.repositories;
 
+import com.example.perguntasbackend.entities.Pontos;
 import com.example.perguntasbackend.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,4 +17,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     @Query(value = "select  from tb_usuarios where id = :idUsuario and pontos is not null ", nativeQuery = true)
     Optional<Usuario> findPontosById(Long idUsuario);
+
+    @Query(value = "select nome, pontos from tb_usuarios where pontos is not null", nativeQuery = true)
+    Optional<Usuario> findPontosPorNome(Usuario usuario);
+
 }
