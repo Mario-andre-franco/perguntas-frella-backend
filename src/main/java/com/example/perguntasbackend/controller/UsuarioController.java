@@ -26,6 +26,14 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<Usuario> loginFake(@RequestBody Usuario usuario) {
+        /*
+        Método responsável por fazer um 'login'.
+        Não é considerado boa pratica fazer essa comparação..
+        Mas aqui no caso verificamos se o email do usuario existe no banco,
+        se existir comparamos as senhas da tela, com a senha cadastrada no banco,
+        se forem igual retornamos ok
+
+         */
         Optional<Usuario> usuarioEmail = usuarioService.findByEmail(usuario.getEmail());
         if (!usuarioEmail.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -74,7 +82,7 @@ public class UsuarioController {
         return pontosService.findAll();
     }
 
-    @PostMapping("/{id}/salvar-pontos")
+    /*@PostMapping("/{id}/salvar-pontos")
     public ResponseEntity<?> salvarPontos(@PathVariable Long id, @RequestBody int pontos) {
         Optional<Usuario> usuario = usuarioService.findById(id);
         Optional<Usuario> usuarioOptional = usuarioService.findPontosById(id);
@@ -87,6 +95,6 @@ public class UsuarioController {
         pontosService.save(pontos1, usuarioOptional.get());
 
         return ResponseEntity.ok(pontos);
-    }
+    }*/
 
 }

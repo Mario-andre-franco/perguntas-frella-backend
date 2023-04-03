@@ -41,6 +41,11 @@ public class PerguntasController {
     @GetMapping("/gerar-pergunta")
     public ResponseEntity<Pergunta> gerarPergunta() {
 
+        /*
+        Método responsavel por pegar uma pergunta aleatoria,
+        no banco de dados seguindo a query do perguntasService:
+        select * from tb_perguntas order by rand() limit 1
+         */
         Pergunta getPerguntas = perguntasService.perguntaAleatoria();
         if(getPerguntas != null) {
             return ResponseEntity.ok().body(getPerguntas);

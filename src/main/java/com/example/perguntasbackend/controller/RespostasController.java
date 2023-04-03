@@ -19,7 +19,7 @@ import java.util.Optional;
 public class RespostasController {
 
     @Autowired
-    private PerguntasService perguntasService;  
+    private PerguntasService perguntasService;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -27,30 +27,34 @@ public class RespostasController {
     @Autowired
     private RespostaService respostaService;
 
-    @Autowired
-    private PontosService pontosService;
-
     @PostMapping("/salvar-respostas/usuario/{idUsuario}/pergunta/{idPergunta}")
     public ResponseEntity<Resposta> salvarRespostas(@PathVariable Long idUsuario, @PathVariable Long idPergunta, @RequestBody Resposta resposta) {
         Optional<Pergunta> procurarPergunta = perguntasService.findById(idPergunta);
         Optional<Usuario> usuarioExiste = usuarioService.findById(idUsuario);
-        Optional<Pontos> pontos = pontosService.findById(idUsuario);
-        if (!procurarPergunta.isPresent() || !usuarioExiste.isPresent()) {
+        if (!usuarioExiste.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        List<OpcaoResposta> list = resposta.getOpcoes();
+
+        /*Aqui vamos pegar o id da resposta do banco e comparar
+        com o que o usuário marcou em tela,
+        Se forem iguais, chamamos o service para atualizar os pontos daquele usuário
+        Caso esteja errado, jogamos um 404 apenas para questão de controle no frontend
+        */
+
+        Long idResposta = resposta.getOpcoes().get(0).getId();
         List<OpcaoResposta> listRespostaBanco = procurarPergunta.get().getRespostas().getOpcoes();
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < listRespostaBanco.size(); j++) {
-                if (list.get(i).getId().equals(listRespostaBanco.get(j).getId())) {
-                    //salvou usuario com a pontuacao
-                    respostaService.atualizaPontos(usuarioExiste);
-                    pontosService.save(pontos.get(), usuarioExiste.get());
-                    return ResponseEntity.status(HttpStatus.CREATED).build();
-                }
+        Long idCorreto = null;
+        for (int i = 0; i < listRespostaBanco.size(); i++) {
+            if(listRespostaBanco.get(i).isVerdadeira()) {
+                idCorreto = listRespostaBanco.get(i).getId();
             }
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if(idResposta.equals(idCorreto)) {
+            respostaService.atualizaPontos(usuarioExiste);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
     }
 
 

@@ -34,7 +34,7 @@ public class Usuario {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @Column(name= "pontos")
+    @Column(name= "pontos", columnDefinition = "0")
     private Integer pontosTotais;
 
 }
