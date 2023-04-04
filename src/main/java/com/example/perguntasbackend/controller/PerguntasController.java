@@ -27,11 +27,6 @@ public class PerguntasController {
         return perguntasService.findAll();
     }
 
-    @GetMapping("/consultar-perguntas/{id}")
-    @ResponseBody
-    public Optional<Pergunta> consultarPorId(@PathVariable Long id) {
-        return perguntasService.findById(id);
-    }
     @PostMapping("/criar-pergunta")
     public Pergunta criarPergunta(@RequestBody Pergunta perguntaModel) {
 
@@ -54,11 +49,9 @@ public class PerguntasController {
     }
 
     @GetMapping("/consultar-perguntas-por-categoria/{idCategoria}")
-    public ResponseEntity<?> gerarPerguntaPorCategoria(@PathVariable String idCategoria) {
-        List<Pergunta> getPerguntas = perguntasService.perguntaPorCategoria(idCategoria);
-        if(getPerguntas.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+    @ResponseBody
+    public ResponseEntity<Pergunta> gerarPerguntaPorCategoria(@PathVariable String idCategoria) {
+        Pergunta getPerguntas = perguntasService.perguntaPorCategoria(idCategoria);
         return ResponseEntity.ok().body(getPerguntas);
 
     }

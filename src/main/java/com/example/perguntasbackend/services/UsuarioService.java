@@ -6,6 +6,7 @@ import com.example.perguntasbackend.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,7 @@ public class UsuarioService {
       return usuarioRepository.save(usuario);
     }
 
-    public Optional<Usuario> findPontosById(Long id) {
-        return usuarioRepository.findPontosById(id);
+    public List<Usuario> findPontosByNome() {
+        return usuarioRepository.findPontosByNome();
     }
 }

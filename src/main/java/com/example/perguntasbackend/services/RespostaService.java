@@ -39,4 +39,18 @@ public class RespostaService {
         atualizaPontosUsuario.setPontosTotais(atualizaPontosUsuario.getPontosTotais() + 10);
         usuarioService.save(atualizaPontosUsuario);
     }
+
+    public void atualizaPontosCategoria(Optional<Usuario> usuarioExiste) {
+        /*
+        Aqui fazemos a atualização dos pontos do usuario.
+        Se os pontos totais forem igual a null, setamos zero para evitar null pointer
+        quando pegarmos o esse valor que vem do objeto usuarioExiste
+         */
+        Usuario atualizaPontosUsuario = usuarioExiste.get();
+        if(atualizaPontosUsuario.getPontosTotais() == null) {
+            atualizaPontosUsuario.setPontosTotais(0);
+        }
+        atualizaPontosUsuario.setPontosTotais(atualizaPontosUsuario.getPontosTotais() + 30);
+        usuarioService.save(atualizaPontosUsuario);
+    }
 }

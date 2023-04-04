@@ -12,10 +12,9 @@ import java.util.Optional;
 public interface PerguntasRepository extends JpaRepository<Pergunta, Long>{
 
     Optional<Pergunta> findById(Long id);
-    Optional<Pergunta> findRespostaById(Long id);
     @Query(value = "select * from tb_perguntas order by rand() limit 1", nativeQuery = true)
     Pergunta findPerguntaAleatoria();
 
-    @Query(value = "select * from tb_perguntas where categoria = :Idcategoria", nativeQuery = true)
-    List<Pergunta> findPerguntaByCategoria(String Idcategoria);
+    @Query(value = "select * from tb_perguntas where categoria = :Idcategoria order by rand() limit 1", nativeQuery = true)
+    Pergunta findPerguntaByCategoria(String Idcategoria);
 }

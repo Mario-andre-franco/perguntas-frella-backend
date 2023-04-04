@@ -23,10 +23,6 @@ public class PerguntasService {
         return perguntasRepository.findById(id);
     }
 
-    public Optional<Pergunta> findRespostaById(Long id) {
-        return perguntasRepository.findRespostaById(id);
-    }
-
     public List<Pergunta> findAll() {
         return perguntasRepository.findAll();
     }
@@ -34,7 +30,7 @@ public class PerguntasService {
     public Pergunta perguntaAleatoria() {
         return perguntasRepository.findPerguntaAleatoria();
     }
-    public List<Pergunta> perguntaPorCategoria(String idCategoria) {
+    public Pergunta perguntaPorCategoria(String idCategoria) {
         return perguntasRepository.findPerguntaByCategoria(idCategoria);
     }
 }

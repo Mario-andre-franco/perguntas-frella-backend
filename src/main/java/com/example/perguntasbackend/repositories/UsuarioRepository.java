@@ -15,10 +15,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findById(Long id);
     Optional<Usuario> findByEmail(String email);
 
-    @Query(value = "select  from tb_usuarios where id = :idUsuario and pontos is not null ", nativeQuery = true)
-    Optional<Usuario> findPontosById(Long idUsuario);
-
-    @Query(value = "select nome, pontos from tb_usuarios where pontos is not null", nativeQuery = true)
-    Optional<Usuario> findPontosPorNome(Usuario usuario);
+    @Query(value = "select * from tb_usuarios where pontos is not null order by pontos desc ", nativeQuery = true)
+    List<Usuario> findPontosByNome();
 
 }
