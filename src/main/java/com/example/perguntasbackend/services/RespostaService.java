@@ -18,10 +18,6 @@ public class RespostaService {
     @Autowired
     UsuarioService usuarioService;
 
-    public Resposta save (Resposta resposta) {
-        return respostaRepository.save(resposta);
-    }
-
     public Optional<Resposta> findById(Long id) {
         return respostaRepository.findById(id);
     }
